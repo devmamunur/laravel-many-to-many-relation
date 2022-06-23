@@ -5,16 +5,41 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header d-flex justify-content-between">
+                    <p>{{ __('Dashboard') }}</p>
+                    <a href="{{ route("home") }}">All Blog</a>
+                </div>
+
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+                    @forelse ( $blogs as $blog)
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <p>Category : <a href="{{ route('home', ['category'=>$blog->category->id] ) }}">{{ $blog->category->title }}</a></p>
+                                <h4 class="card-title">
+                                    #{{ $blog->id }}, {{ $blog->title }}
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                {{ $blog->description }}
+                            </div>
+                            <div class="card-footer">
+                                Tags :
+                                @forelse ( $blog->tags as $tag)
+                                    <a class="tags" href="{{ route('home', ['tag'=>$tag->id] ) }}">{{ $tag->title }}</a>
+                                @empty
+                                    Not Tag Found
+                                @endforelse
+                                <a href="#"></a>
+                            </div>
                         </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
+                    @empty
+                        <div class="card">
+                            <div class="card-body">
+                                Not Blog Found
+                            </div>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>
